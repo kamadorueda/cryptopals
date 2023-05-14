@@ -27,16 +27,25 @@ pub fn chi_squared(inputs: &[&[f64]]) -> anyhow::Result<f64> {
 
   let test_statistic = row_totals
     .iter()
+    .copied()
     .enumerate()
     .map(|(row, row_total)| {
       column_totals
         .iter()
+        .copied()
         .enumerate()
         .map(|(column, column_total)| {
-          let expected = column_total * row_total / total;
           let observed = inputs[row][column];
 
-          (observed - expected).powf(2f64) / expected
+          if total == 0.0 || column_total == 0.0 || row_total == 0.0 {
+            if observed == 0.0 { 1.0 } else { 0.0 }
+          } else {
+            let expected = column_total * row_total / total;
+            let x = (observed - expected).powf(2f64) / expected;
+
+            // println!("{expected}, {observed}, {x}");
+            x
+          }
         })
         .sum::<f64>()
     })
@@ -51,4 +60,24 @@ pub fn chi_squared(inputs: &[&[f64]]) -> anyhow::Result<f64> {
   let p = 1f64 - chi_squared.cdf(test_statistic);
 
   Ok(p)
+}
+
+#[cfg(test)]
+#[test]
+fn test() -> anyhow::Result<()> {
+  use statrs::assert_almost_eq;
+
+  assert_almost_eq!(
+    chi_squared(&[&[120.0, 90.0, 40.0], &[110.0, 95.0, 45.0]])?,
+    0.649198,
+    0.000001
+  );
+
+  assert_almost_eq!(
+    chi_squared(&[&[0.0, 0.0], &[0.0, 0.0]])?,
+    0.045500,
+    0.000001
+  );
+
+  Ok(())
 }
