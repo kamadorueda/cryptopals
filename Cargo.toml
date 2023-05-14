@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = { version = "*", default-features = false, features = [] }
 base64 = { version = "*", default-features = false, features = ["std"] }
+statrs = { version = "*", default-features = false, features = [] }
 hex = { version = "*", default-features = false, features = ["alloc"] }
