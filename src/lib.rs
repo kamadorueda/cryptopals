@@ -1,3 +1,4 @@
+pub mod ascii_frequencies_en;
 pub mod base64_to_bytes;
 pub mod bytes_frequency;
 pub mod bytes_to_base64;

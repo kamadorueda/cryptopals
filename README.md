@@ -2,10 +2,10 @@
 
 This repository contains my solutions to the https://cryptopals.com/ crypto challenges
 in the Rust programming language.
-A lot of focus has been put into simplicity and readability.
 
 |                                 Challenge                                  |                         Solution                          |
 | :------------------------------------------------------------------------: | :-------------------------------------------------------: |
+|   [Break repeating-key XOR](https://cryptopals.com/sets/1/challenges/6)    | [Set 1 Challenge 6](./tests/solutions/set1_challenge6.rs) |
 | [Implement repeating-key XOR](https://cryptopals.com/sets/1/challenges/5)  | [Set 1 Challenge 5](./tests/solutions/set1_challenge5.rs) |
 | [ Detect single-character XOR](https://cryptopals.com/sets/1/challenges/4) | [Set 1 Challenge 4](./tests/solutions/set1_challenge4.rs) |
 |    [Single-byte XOR cipher](https://cryptopals.com/sets/1/challenges/3)    | [Set 1 Challenge 3](./tests/solutions/set1_challenge3.rs) |

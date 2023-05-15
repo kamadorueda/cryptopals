@@ -1,12 +1,14 @@
+use cryptopals::hex_to_bytes::hex_to_bytes;
+
 /// Score all inputs by their likelihood of it being natural
 /// english using the solver from the previous challenge.
 pub fn solve(
-  inputs: &[&str],
+  inputs: &[Vec<u8>],
 ) -> anyhow::Result<
   Vec<crate::solutions::set1_challenge3::Scored>,
 > {
   let mut scores: Vec<_> = inputs
-    .into_iter()
+    .iter()
     .map(|input| {
       crate::solutions::set1_challenge3::solve(input)
     })
@@ -24,10 +26,11 @@ pub fn solve(
 #[cfg(test)]
 #[test]
 fn solution() -> anyhow::Result<()> {
-  let inputs: Vec<&str> =
+  let inputs: Vec<Vec<u8>> =
     include_str!("set1_challenge4_input.txt")
       .lines()
-      .collect();
+      .map(hex_to_bytes)
+      .collect::<anyhow::Result<_>>()?;
 
   let candidates = solve(&inputs)?;
 
@@ -35,11 +38,10 @@ fn solution() -> anyhow::Result<()> {
   assert_eq!(candidates.len(), 83385);
 
   assert_eq!(
-    // Pick the 3rd best candidate
     candidates
       .into_iter()
       .map(|candidate| candidate.result)
-      .nth(3)
+      .next()
       .as_deref(),
     Some("Now that the party is jumping\n")
   );

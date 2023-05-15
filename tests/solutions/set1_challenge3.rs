@@ -1,5 +1,5 @@
+use cryptopals::ascii_frequencies_en::ASCII_FREQUENCIES_EN;
 use cryptopals::bytes_frequency::bytes_frequency;
-use cryptopals::bytes_frequency::ENGLISH_FREQUENCIES;
 use cryptopals::chi_squared::chi_squared;
 use cryptopals::hex_to_bytes::hex_to_bytes;
 use cryptopals::xor_bytes::xor_bytes;
@@ -13,13 +13,11 @@ pub struct Scored {
 
 /// Take the input, XOR it against every possible key,
 /// score them by likelihood of it being natural english.
-pub fn solve(input: &str) -> anyhow::Result<Vec<Scored>> {
-  let input_bytes = hex_to_bytes(input)?;
-
+pub fn solve(input: &[u8]) -> anyhow::Result<Vec<Scored>> {
   let mut scores: Vec<Scored> = (u8::MIN..u8::MAX)
     .map(|key| {
-      let key_bytes = vec![key; input_bytes.len()];
-      let bytes = xor_bytes(&input_bytes, &key_bytes)?;
+      let key_bytes = vec![key; input.len()];
+      let bytes = xor_bytes(input, &key_bytes)?;
       let bytes_lowercase: Vec<u8> = bytes
         .iter()
         .copied()
@@ -34,7 +32,7 @@ pub fn solve(input: &str) -> anyhow::Result<Vec<Scored>> {
         key,
         chi_square: chi_squared(&[
           &frequencies,
-          &ENGLISH_FREQUENCIES,
+          &ASCII_FREQUENCIES_EN,
         ])?,
         result: String::from_utf8(bytes)
           .unwrap_or_default(),
@@ -51,14 +49,15 @@ pub fn solve(input: &str) -> anyhow::Result<Vec<Scored>> {
 #[cfg(test)]
 #[test]
 fn solution() -> anyhow::Result<()> {
+  let input = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+  let bytes = hex_to_bytes(input)?;
+
   assert_eq!(
-    solve(
-      "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-    )?
-    .into_iter()
-    .map(|solution| solution.result)
-    .next()
-    .as_deref(),
+    solve(&bytes)?
+      .into_iter()
+      .map(|solution| solution.result)
+      .next()
+      .as_deref(),
     Some("Cooking MC's like a pound of bacon")
   );
 

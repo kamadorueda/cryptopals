@@ -23,13 +23,11 @@ pub fn chi_squared(
   );
 
   let column_totals: Vec<f64> = (0..columns)
-    .into_iter()
     .map(|column| {
       inputs.iter().fold(0f64, |sum, row| sum + row[column])
     })
     .collect();
   let row_totals: Vec<f64> = (0..rows)
-    .into_iter()
     .map(|row| inputs[row].iter().sum())
     .collect();
 
