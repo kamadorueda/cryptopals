@@ -8,8 +8,8 @@ fn solution() -> anyhow::Result<()> {
     "1c0111001f010100061a024b53535009181c",
     "686974207468652062756c6c277320657965",
   ];
-  let a_bytes = hex_to_bytes(&inputs[0])?;
-  let b_bytes = hex_to_bytes(&inputs[1])?;
+  let a_bytes = hex_to_bytes(inputs[0])?;
+  let b_bytes = hex_to_bytes(inputs[1])?;
   let bytes = xor_bytes(&a_bytes, &b_bytes)?;
   let hex = bytes_to_hex(&bytes);
 
