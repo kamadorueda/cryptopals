@@ -1,3 +1,3 @@
-pub fn bytes_to_hex(hex: &[u8]) -> String {
-  hex::encode(hex)
+pub fn bytes_to_hex(bytes: &[u8]) -> String {
+  hex::encode(bytes)
 }
