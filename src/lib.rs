@@ -3,8 +3,4 @@ pub mod bytes_to_base64;
 pub mod bytes_to_hex;
 pub mod chi_squared;
 pub mod hex_to_bytes;
-pub mod set_1_challenge_1;
-pub mod set_1_challenge_2;
-pub mod set_1_challenge_3;
-pub mod set_1_challenge_4;
 pub mod xor_bytes;

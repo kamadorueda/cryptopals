@@ -1,8 +1,8 @@
-use crate::bytes_frequency::bytes_frequency;
-use crate::bytes_frequency::ENGLISH_FREQUENCIES;
-use crate::chi_squared::chi_squared;
-use crate::hex_to_bytes::hex_to_bytes;
-use crate::xor_bytes::xor_bytes;
+use cryptopals::bytes_frequency::bytes_frequency;
+use cryptopals::bytes_frequency::ENGLISH_FREQUENCIES;
+use cryptopals::chi_squared::chi_squared;
+use cryptopals::hex_to_bytes::hex_to_bytes;
+use cryptopals::xor_bytes::xor_bytes;
 
 #[derive(Debug)]
 pub struct Scored {
@@ -19,7 +19,7 @@ pub fn solve(input: &str) -> anyhow::Result<Vec<Scored>> {
   let mut scores: Vec<Scored> = (u8::MIN..u8::MAX)
     .map(|key| {
       let key_bytes = vec![key; input_bytes.len()];
-      let bytes = xor_bytes(&input_bytes, &key_bytes);
+      let bytes = xor_bytes(&input_bytes, &key_bytes)?;
       let bytes_lowercase: Vec<u8> = bytes
         .iter()
         .copied()
@@ -32,17 +32,23 @@ pub fn solve(input: &str) -> anyhow::Result<Vec<Scored>> {
 
       Ok(Scored {
         key,
-        chi_square: chi_squared(&[&frequencies, &ENGLISH_FREQUENCIES])?,
-        result: String::from_utf8(bytes).unwrap_or_default(),
+        chi_square: chi_squared(&[
+          &frequencies,
+          &ENGLISH_FREQUENCIES,
+        ])?,
+        result: String::from_utf8(bytes)
+          .unwrap_or_default(),
       })
     })
     .collect::<anyhow::Result<_>>()?;
 
-  scores.sort_by(|a, b| a.chi_square.total_cmp(&b.chi_square));
+  scores
+    .sort_by(|a, b| a.chi_square.total_cmp(&b.chi_square));
 
   Ok(scores)
 }
 
+#[cfg(test)]
 #[test]
 fn solution() -> anyhow::Result<()> {
   assert_eq!(

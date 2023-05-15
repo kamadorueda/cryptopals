@@ -1,5 +1,5 @@
-use crate::bytes_to_base64::bytes_to_base64;
-use crate::hex_to_bytes::hex_to_bytes;
+use cryptopals::bytes_to_base64::bytes_to_base64;
+use cryptopals::hex_to_bytes::hex_to_bytes;
 
 pub fn solve(input: &str) -> anyhow::Result<String> {
   let bytes = hex_to_bytes(input)?;
