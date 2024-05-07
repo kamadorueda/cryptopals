@@ -1,7 +1,10 @@
 use cryptopals::bytes_to_hex::bytes_to_hex;
 use cryptopals::xor_bytes::xor_bytes;
 
-pub fn repeating_key_xor(key: &[u8], input: &[u8]) -> anyhow::Result<Vec<u8>> {
+pub(crate) fn repeating_key_xor(
+  key: &[u8],
+  input: &[u8],
+) -> anyhow::Result<Vec<u8>> {
   let key_bytes = key
     .iter()
     .cycle()

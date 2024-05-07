@@ -5,15 +5,15 @@ use cryptopals::hex_to_bytes::hex_to_bytes;
 use cryptopals::xor_bytes::xor_bytes;
 
 #[derive(Debug)]
-pub struct SingleCharacterXorCandidate {
-  pub key: u8,
-  pub chi_square: f64,
-  pub result: String,
+pub(crate) struct SingleCharacterXorCandidate {
+  pub(crate) key: u8,
+  pub(crate) chi_square: f64,
+  pub(crate) result: String,
 }
 
 /// Take the input, XOR it against every possible key,
 /// score them by likelihood of it being natural english.
-pub fn find_single_character_xor_key_candidates(
+pub(crate) fn find_single_character_xor_key_candidates(
   input: &[u8],
 ) -> anyhow::Result<Vec<SingleCharacterXorCandidate>> {
   let mut scores: Vec<SingleCharacterXorCandidate> = (u8::MIN..u8::MAX)
