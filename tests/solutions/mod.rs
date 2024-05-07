@@ -6,4 +6,5 @@ pub(crate) mod set1_challenge5;
 pub(crate) mod set1_challenge6;
 pub(crate) mod set1_challenge7;
 pub(crate) mod set1_challenge8;
+pub(crate) mod set2_challenge10;
 pub(crate) mod set2_challenge9;
