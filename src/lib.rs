@@ -1,3 +1,5 @@
+#![feature(slice_as_chunks)]
+pub mod aes_128;
 pub mod ascii_frequencies_en;
 pub mod base64_to_bytes;
 pub mod bytes_frequency;

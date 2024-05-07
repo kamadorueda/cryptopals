@@ -4,7 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+aes = { version = "*", default-features = false, features = [] }
 anyhow = { version = "*", default-features = false, features = [] }
 base64 = { version = "*", default-features = false, features = ["std"] }
+cipher = { version = "*", default-features = false, features = [
+  "alloc",
+  "block-padding",
+] }
 statrs = { version = "*", default-features = false, features = [] }
+tap = { version = "*", default-features = false, features = [] }
 hex = { version = "*", default-features = false, features = ["alloc"] }
