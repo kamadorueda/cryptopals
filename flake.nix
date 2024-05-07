@@ -1,33 +1,41 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     fenix.url = "github:nix-community/fenix";
+
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    systems.url = "github:nix-systems/default";
   };
+
   outputs = inputs: let
-    supportedSystems = inputs.nixpkgs.lib.systems.flakeExposed;
-    forAllSupportedSystems = inputs.nixpkgs.lib.genAttrs supportedSystems;
+    supportedSystems = import inputs.systems;
+
+    forEachSystem = inputs.nixpkgs.lib.genAttrs supportedSystems;
+
+    nixkpgsOverlayForSystem = system: (nixpkgs: _: rec {
+      cryptopals = {
+        shell = nixpkgs.mkShell {
+          name = "default";
+          packages = [
+            nixpkgs.fenix.complete.toolchain
+          ];
+        };
+      };
+    });
 
     nixpkgsForSystem = system:
       import inputs.nixpkgs {
         inherit system;
         overlays = [
-          (self: super: {
-            fenix = inputs.fenix.packages.${system};
-          })
+          inputs.fenix.overlays.default
+          (nixkpgsOverlayForSystem system)
         ];
       };
-    nixpkgs = forAllSupportedSystems nixpkgsForSystem;
 
-    devShellsForSystem = system:
-      with nixpkgs.${system}; {
-        default = mkShell {
-          name = "default";
-          packages = [
-            fenix.complete.toolchain
-          ];
-        };
-      };
+    nixpkgs = forEachSystem nixpkgsForSystem;
   in {
-    devShells = forAllSupportedSystems devShellsForSystem;
+    devShells = forEachSystem (system: {
+      default = nixpkgs.${system}.cryptopals.shell;
+    });
   };
 }
